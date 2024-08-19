@@ -10,12 +10,13 @@ def lookup_ms_dns(domain, verbose):
     try:
         result = res.resolve('{}.mail.protection.outlook.com'.format(formatted_domain), 'A')
         if verbose:
+            print("[+] Domain {}.mail.protection.outlook.com exists".format(formatted_domain))
             for ipval in result:
-                print('IP', ipval.to_text())
+                print('\tIP', ipval.to_text())
         return True
     except:
         if verbose:
-            print("MS Outlook Records do not exist")
+            print("[-] MS Outlook Records do not exist")
         return False
 
 def check_smtp_external(domain, verbose):
@@ -28,17 +29,17 @@ def check_smtp_external(domain, verbose):
         result = s.connect_ex((target,25))
         if result ==0:
             if verbose:
-                print("Port {} on host {} is open".format(25, "{}.mail.protection.outlook.com".format(formatted_domain)))
+                print("[+] Port {} on host {} is open".format(25, "{}.mail.protection.outlook.com".format(formatted_domain)))
             return True
         s.close()
         return False
     except socket.gaierror:
         if verbose:
-            print("MS Direct Send host not resolving")
+            print("[-] MS Direct Send host not resolving")
         return False
     except socket.error:
         if verbose:
-            print("MS Direct Send Server not responding")
+            print("[-] MS Direct Send Server not responding")
         return False
 
 def check_direct_send(args):
